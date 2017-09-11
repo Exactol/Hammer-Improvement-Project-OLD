@@ -14,7 +14,7 @@
 #define ID_BUTTON32774                  32774
 #define ID_HAMMERSYNC_DEBUGENABLE       32774
 #define ID_HAMMERSYNC_EXIT              32776
-
+#define ID_HAMMERSYNC_COMPILEPALBTN		32777
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

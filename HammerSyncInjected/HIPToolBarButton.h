@@ -46,6 +46,11 @@ public:
 		button[0].iString = iString;
 	}
 
+	HIPToolBarButton()
+	{
+		
+	}
+
 	void AppendBitmap(HWND parentHwnd)
 	{
 		BITMAP tempbitmap;
@@ -61,12 +66,12 @@ public:
 
 		HICON hicon = CreateIconIndirect(&ii);
 		DeleteObject(hbmMask);
-
 		//Get imagelist of toolbar
 		HIMAGELIST imageList = (HIMAGELIST)SendMessage(parentHwnd, TB_GETIMAGELIST,0, 0);
 
 		//Bitmap location will be total image count + 1
-		bitmapLoc = 31;//ImageList_GetImageCount(imageList) + 1;
+		//TODO temporary workaround until i can get either TB_BUTTONCOUNT working or ImageList_GetImageCount;
+		bitmapLoc = 31; //ImageList_GetImageCount(imageList) + 1;
 		button[0].iBitmap = bitmapLoc;
 
 		//Add icon to imagelist

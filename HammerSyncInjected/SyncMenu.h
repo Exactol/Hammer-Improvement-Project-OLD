@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 
-//TODO release to public?
 class SyncSubMenu
 {
 public:

@@ -21,16 +21,20 @@
 #define EnableItem(id, uFlags) CMenu::FromHandle(GetMenu(hWnd))->EnableMenuItem(id, uFlags);
 //#define IDB_COMPILEPAL 1007
 
-
+//TODO Move to header?
 HWND hWnd;
 CToolBar hammerToolbar;
 HMENU hMenuHammer;
 SyncMenu smDebug;
 
-int hammerTopToolbarID = 0;
+
+HWND test;
+
+
+//int hammerTopToolbarID = 0;
 
 //Default hammer toolbar styles
-const DWORD dwDefStyles = WS_CHILD | WS_VISIBLE | CBRS_TOP;
+//const DWORD dwDefStyles = WS_CHILD | WS_VISIBLE | CBRS_TOP;
 
 //CMenu *cSyncMenu;
 long OldWndProc;
@@ -64,11 +68,25 @@ long OldWndProc;
 // CHammerSyncInjectedApp
 
 BEGIN_MESSAGE_MAP(CHammerSyncInjectedApp, CWinApp)
+	//{{AFX_MSG_MAP(CMainFrame)
+	ON_COMMAND(ID_HAMMERSYNC_COMPILEPALBTN, OnCompilePalBtnPressed)
+	ON_UPDATE_COMMAND_UI(ID_HAMMERSYNC_COMPILEPALBTN, OnUpdateCompilePalBtnPressed)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
+
+void CHammerSyncInjectedApp::OnCompilePalBtnPressed()
+{
+	Utils::PrintError(L"OnCompPalBtnPressed");
+}
+
+void CHammerSyncInjectedApp::OnUpdateCompilePalBtnPressed(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+	Utils::PrintError(L"OnCompPalUpdate");
+}
 
 
 // CHammerSyncInjectedApp construction
-
 CHammerSyncInjectedApp::CHammerSyncInjectedApp()
 {
 	// TODO: add construction code here,
@@ -117,6 +135,7 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 				case(ID_HAMMERSYNC_SETTINGS):
 					{
+					SendMessage(test, TB_ENABLEBUTTON, 31, (LPARAM)MAKELONG(TRUE, 0));
 /*					HINSTANCE hInstance = (HINSTANCE)::GetModuleHandle(NULL);
 					HWND hwndButton = CreateWindow(
 						L"MDIClient",
@@ -133,6 +152,10 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 				case(ID_HAMMERSYNC_EXIT):
 					break;
+
+				case(ID_HAMMERSYNC_COMPILEPALBTN):
+					Utils::PrintError(L"Cp");
+					break;
 			}
 			break;
 		case(WM_INITMENU):
@@ -145,7 +168,12 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			//EnableItem(ID_DEBUG_CALLFUNCTION, MF_ENABLED);
 			//break;
 			//TODO figure out a less hacky workaround. Creating inside subclassed message handler could work?
+			//Maybe editing messages could work? or sending messages
 			return 0;	
+
+		//case(WM_INITDIALOG):
+		//	return 0;
+
 	}
 	return CallWindowProc((WNDPROC)OldWndProc, hwnd, message, wParam, lParam);
 }
@@ -170,11 +198,16 @@ BOOL CALLBACK GetChildWndCallback(HWND hWndChild, LPARAM lParam)
 		{
 			if(keepMakingToolbars)
 			{
+				//Add seperator
 				HIPToolBarButtonSeperator::Append(hWndChild);
 
-				HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, STD_FILENEW, TBSTATE_ENABLED, TBSTYLE_BUTTON);
+				//Add buttons
+				HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, ID_HAMMERSYNC_COMPILEPALBTN, TBSTATE_ENABLED, TBSTYLE_BUTTON );
 				compilePalBtn.AppendBitmap(hWndChild);
 				compilePalBtn.Append(hWndChild);			
+
+				SendMessage(hWndChild, TB_ENABLEBUTTON, compilePalBtn.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
+				test = hWndChild;
 				keepMakingToolbars = false;
 			}
 		}
@@ -227,11 +260,14 @@ BOOL CHammerSyncInjectedApp::InitInstance()
 	//	OutputDebugString((LPWSTR)message.c_str());
 	//}
 
+	CWnd *hammer = CWnd::FromHandle(hWnd);
+	CMDIFrameWnd *hammerMainFrm = (CMDIFrameWnd*)CWnd::FromHandle(hWnd);
+	CFrameWnd *hammerFrm = (CFrameWnd*)CWnd::FromHandle(hWnd);
+
 	//Enum child windows to get the top toolbar ID
 	EnumChildWindows(hWnd, GetChildWndCallback, NULL);
 
-	CWnd *hammer = CWnd::FromHandle(hWnd);
-	CMDIFrameWnd *hammerMainFrm = (CMDIFrameWnd*)CWnd::FromHandle(hWnd);
+
 	//CFrameWnd *hammerFrm = (CFrameWnd*)CWnd::FromHandle(hWnd);
 	
 	//HIPWindow *hipSettings = new HIPWindow();
@@ -297,6 +333,7 @@ void CHammerSyncInjectedApp::CreateToolbars(HWND hWndparent)
 	//hammer->UpdateWindow();
 	//RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 }
+
 
 //TODO read/write in main window thread process
 	//LPDWORD winId = nullptr;

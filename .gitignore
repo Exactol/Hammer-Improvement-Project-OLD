@@ -59,3 +59,4 @@ hammersyncInjectedOLD/
 
 #ignore forge for now since its not used yet
 forge/
+packages/
