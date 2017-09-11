@@ -74,13 +74,22 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="toolbar1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bmp00002.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -22,7 +22,7 @@ public:
 	}
 
 	//Append to a popup menu from SyncMenu
-	void Append(HMENU &hMenuNew)
+	void Append(const HMENU &hMenuNew)
 	{
 		AppendMenu(hMenuNew, uFlags, subMenuId, subMenuName);
 	}
@@ -71,7 +71,7 @@ public:
 		subMenus.push_back(subMenu);
 	}
 
-	void Create(HMENU &hMenu)
+	void Create(const HMENU &hMenu)
 	{
 		hSyncMenu = CreateMenu();
 

@@ -218,7 +218,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="bitmap1.bmp" />
+    <Image Include="bitmap2.bmp" />
     <Image Include="bmp00001.bmp" />
+    <Image Include="bmp00002.bmp" />
+    <Image Include="icon1.ico" />
     <Image Include="toolbar1.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

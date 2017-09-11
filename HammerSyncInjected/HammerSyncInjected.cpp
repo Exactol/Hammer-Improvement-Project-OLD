@@ -17,6 +17,21 @@
 	bool debugEnabled = false;
 #endif
 
+BEGIN_MESSAGE_MAP(CHammerSyncInjectedApp, CWinApp)
+	//{{AFX_MSG_MAP(CMainFrame)
+	ON_COMMAND(ID_HAMMERSYNC_COMPILEPALBTN, OnCompilePalBtnPressed)
+	ON_UPDATE_COMMAND_UI(ID_HAMMERSYNC_COMPILEPALBTN, OnUpdateCompilePalBtnPressed)
+
+	ON_COMMAND(ID_TEST1, OnTest1)
+	ON_UPDATE_COMMAND_UI(ID_TEST1, OnUpdateTest1)
+
+
+	ON_COMMAND(ID_TEST2, OnTest2)
+	ON_UPDATE_COMMAND_UI(ID_TEST2, OnUpdateTest2)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+
 #define CheckItem(id, uFlags) CMenu::FromHandle(GetMenu(hWnd))->CheckMenuItem(id, uFlags);
 #define EnableItem(id, uFlags) CMenu::FromHandle(GetMenu(hWnd))->EnableMenuItem(id, uFlags);
 //#define IDB_COMPILEPAL 1007
@@ -27,16 +42,10 @@ CToolBar hammerToolbar;
 HMENU hMenuHammer;
 SyncMenu smDebug;
 
-
+//TODO make a cleaner solution than sending messages?
 HWND test;
 
 
-//int hammerTopToolbarID = 0;
-
-//Default hammer toolbar styles
-//const DWORD dwDefStyles = WS_CHILD | WS_VISIBLE | CBRS_TOP;
-
-//CMenu *cSyncMenu;
 long OldWndProc;
 
 
@@ -67,12 +76,6 @@ long OldWndProc;
 
 // CHammerSyncInjectedApp
 
-BEGIN_MESSAGE_MAP(CHammerSyncInjectedApp, CWinApp)
-	//{{AFX_MSG_MAP(CMainFrame)
-	ON_COMMAND(ID_HAMMERSYNC_COMPILEPALBTN, OnCompilePalBtnPressed)
-	ON_UPDATE_COMMAND_UI(ID_HAMMERSYNC_COMPILEPALBTN, OnUpdateCompilePalBtnPressed)
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
 
 void CHammerSyncInjectedApp::OnCompilePalBtnPressed()
 {
@@ -82,9 +85,21 @@ void CHammerSyncInjectedApp::OnCompilePalBtnPressed()
 void CHammerSyncInjectedApp::OnUpdateCompilePalBtnPressed(CCmdUI *pCmdUI)
 {
 	pCmdUI->Enable(TRUE);
+	pCmdUI->SetText(L"test");
 	Utils::PrintError(L"OnCompPalUpdate");
 }
 
+
+
+void CHammerSyncInjectedApp::OnUpdateTest1(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+}
+
+void CHammerSyncInjectedApp::OnUpdateTest2(CCmdUI * pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+}
 
 // CHammerSyncInjectedApp construction
 CHammerSyncInjectedApp::CHammerSyncInjectedApp()
@@ -154,7 +169,14 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 					break;
 
 				case(ID_HAMMERSYNC_COMPILEPALBTN):
-					Utils::PrintError(L"Cp");
+					Utils::PrintError(L"CompilePalBtn WinMessage");
+					break;
+
+				case(ID_TEST1):
+					Utils::PrintError(L"CompilePalBtn WinMessage");
+					break;
+				case(ID_TEST2):
+					Utils::PrintError(L"CompilePalBtn WinMessage");
 					break;
 			}
 			break;
@@ -202,9 +224,14 @@ BOOL CALLBACK GetChildWndCallback(HWND hWndChild, LPARAM lParam)
 				HIPToolBarButtonSeperator::Append(hWndChild);
 
 				//Add buttons
-				HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, ID_HAMMERSYNC_COMPILEPALBTN, TBSTATE_ENABLED, TBSTYLE_BUTTON );
-				compilePalBtn.AppendBitmap(hWndChild);
-				compilePalBtn.Append(hWndChild);			
+				HIPToolBarButton compilePalBtn(IDB_PLACEHOLDER, ID_HAMMERSYNC_COMPILEPALBTN, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 31 );
+				compilePalBtn.AppendWithBitmap(hWndChild);	
+
+				HIPToolBarButton tempBtn(IDB_TEST, ID_TEST1, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 32 );
+				tempBtn.AppendWithBitmap(hWndChild);	
+
+				HIPToolBarButton tempBtn2(IDB_OBSOLETE, ID_TEST2, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 33 );
+				tempBtn2.AppendWithBitmap(hWndChild);	
 
 				SendMessage(hWndChild, TB_ENABLEBUTTON, compilePalBtn.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
 				test = hWndChild;
@@ -312,11 +339,11 @@ void CHammerSyncInjectedApp::CreateMenus()
 
 void CHammerSyncInjectedApp::CreateToolbars(HWND hWndparent)
 {
-	HIPToolBarButtonSeperator::Append(hWndparent);
+	//HIPToolBarButtonSeperator::Append(hWndparent);
 
-	HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, STD_FILENEW, TBSTATE_ENABLED, TBSTYLE_BUTTON);
-	compilePalBtn.AppendBitmap(hWndparent);
-	compilePalBtn.Append(hWndparent);
+	//HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, STD_FILENEW, TBSTATE_ENABLED, TBSTYLE_BUTTON);
+	//compilePalBtn.AppendBitmap(hWndparent);
+	//compilePalBtn.Append(hWndparent);
 
 	//HIPToolBarButton testBtn(31, STD_FILENEW, TBSTATE_ENABLED, TBSTYLE_BUTTON, false);
 	//testBtn.Append(hWndparent);

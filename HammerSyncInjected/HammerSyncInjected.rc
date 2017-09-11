@@ -121,26 +121,26 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Toolbar
-//
-
-IDR_TOP_TOOLBAR TOOLBAR 16, 15
-BEGIN
-    BUTTON      ID_BUTTON32773
-    BUTTON      ID_BUTTON32774
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Bitmap
 //
-
-IDR_TOP_TOOLBAR         BITMAP                  "toolbar1.bmp"
 
 IDB_COMPILEPAL          BITMAP                  "bitmap1.bmp"
 
 IDB_TEST                BITMAP                  "bmp00001.bmp"
+
+IDB_PLACEHOLDER         BITMAP                  "bitmap2.bmp"
+
+IDB_OBSOLETE            BITMAP                  "bmp00002.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
