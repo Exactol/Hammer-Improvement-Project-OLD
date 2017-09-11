@@ -1,0 +1,71 @@
+﻿<controls:MetroWindow x:Class="Forge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Forge"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+                     
+        ShowMaxRestoreButton="False"    
+        ResizeMode="NoResize"
+                      
+        BorderBrush="{StaticResource MainAccent}"
+        WindowTitleBrush="{StaticResource MainAccent}"
+        BorderThickness="2"
+        Title="Forge First Time Setup" Height="720" Width="615" >
+    
+    <Grid Background="{StaticResource Background}">
+        <StackPanel Background="#282828" Width="450" >
+            <StackPanel.Effect>
+                <DropShadowEffect BlurRadius="50" ShadowDepth="5" Opacity="0.75" Color="{StaticResource MenuShadowColor}" Direction="-90"/>
+            </StackPanel.Effect>
+            <Label Foreground="{StaticResource MainAccent}" FontSize="60" FontFamily="Segoe UI" HorizontalAlignment="Center">
+                First Time Setup
+            </Label>
+            <Separator Height="38" ></Separator>
+            
+            <!--///////////////////////////////////////////////////////////////////////////////////-->
+            <Label Foreground="{StaticResource MainAccent}" FontSize="15" FontFamily="Segoe UI" FontWeight="Bold">
+                GameInfo.txt Location
+            </Label>
+            <TextBox controls:TextBoxHelper.Watermark="Filepath for Gameinfo.txt"
+                     Margin="5, 5, 50, 5" BorderBrush="{StaticResource MainAccent}" BorderThickness="2"  Background="{StaticResource DarkAccent}" 
+                     Foreground="{StaticResource MainAccent}" Height="30" TextWrapping="NoWrap" 
+                     SelectionBrush="{StaticResource MainAccentSelected}"
+                     TextAlignment="Left" VerticalContentAlignment="Center" 
+                     AcceptsReturn="False" AcceptsTab="False"/>
+            
+            <!--///////////////////////////////////////////////////////////////////////////////////-->
+            <Separator Height="60" Visibility="Hidden"></Separator>
+            <Label Foreground="{StaticResource MainAccent}" FontSize="15" FontFamily="Segoe UI" FontWeight="Bold">
+                VMF Location
+            </Label>
+            <TextBox controls:TextBoxHelper.Watermark="Filepath for vmfs"
+                     Margin="5, 5, 50, 5" BorderBrush="{StaticResource MainAccent}" BorderThickness="2"  Background="{StaticResource DarkAccent}" 
+                     Foreground="{StaticResource MainAccent}" Height="30" TextWrapping="NoWrap" 
+                     SelectionBrush="{StaticResource MainAccentSelected}"
+                     TextAlignment="Left" VerticalContentAlignment="Center" 
+                     AcceptsReturn="False" AcceptsTab="False"/>
+            
+            <!--///////////////////////////////////////////////////////////////////////////////////-->
+            <Separator Height="60" Visibility="Hidden"></Separator>
+            <Label Foreground="{StaticResource MainAccent}" FontSize="15" FontFamily="Segoe UI" FontWeight="Bold">
+                Module Location
+            </Label>
+            <TextBox controls:TextBoxHelper.Watermark="Filepath for modules to be injected"
+                    Margin="5, 5, 50, 5" BorderBrush="{StaticResource MainAccent}" BorderThickness="2"  Background="{StaticResource DarkAccent}" 
+                     Foreground="{StaticResource MainAccent}" Height="30" TextWrapping="NoWrap" 
+                     SelectionBrush="{StaticResource MainAccentSelected}"
+                     TextAlignment="Left" VerticalContentAlignment="Center" 
+                     AcceptsReturn="False" AcceptsTab="False">
+            </TextBox>
+            <!--///////////////////////////////////////////////////////////////////////////////////-->
+            
+            <controls:ToggleSwitch Background="{StaticResource DarkAccent}" Foreground="{StaticResource MainAccent}" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitch.Win10}"/>
+            
+        </StackPanel>
+    </Grid>
+</controls:MetroWindow>
+

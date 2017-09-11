@@ -45,3 +45,14 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Files created by plugins
+.vs/
+
+#compiled results
+debug/
+forge/bin/
+forge/obj/
+
+#oldhammersyncfolder
+hammersyncInjectedOLD/
