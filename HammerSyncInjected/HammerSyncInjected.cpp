@@ -18,33 +18,33 @@
 #endif
 
 BEGIN_MESSAGE_MAP(CHammerSyncInjectedApp, CWinApp)
-	//{{AFX_MSG_MAP(CMainFrame)
-	ON_COMMAND(ID_HAMMERSYNC_COMPILEPALBTN, OnCompilePalBtnPressed)
-	ON_UPDATE_COMMAND_UI(ID_HAMMERSYNC_COMPILEPALBTN, OnUpdateCompilePalBtnPressed)
+	
+	////{{AFX_MSG_MAP(CMainFrame)
 
-	ON_COMMAND(ID_TEST1, OnTest1)
-	ON_UPDATE_COMMAND_UI(ID_TEST1, OnUpdateTest1)
+	//ON_COMMAND(ID_HAMMERSYNC_COMPILEPALBTN, OnCompilePalBtnPressed)
+	//ON_UPDATE_COMMAND_UI(ID_HAMMERSYNC_COMPILEPALBTN, OnUpdateCompilePalBtnPressed)
+
+	//ON_COMMAND(ID_TEST1, OnTest1)
+	//ON_UPDATE_COMMAND_UI(ID_TEST1, OnUpdateTest1)
+
+	//ON_COMMAND(ID_TEST2, OnTest2)
+	//ON_UPDATE_COMMAND_UI(ID_TEST2, OnUpdateTest2)
+
+	//ON_COMMAND(ID_TEST2, OnTest2)
+	//ON_UPDATE_COMMAND_UI(ID_TEST2, OnUpdateTest2)
 
 
-	ON_COMMAND(ID_TEST2, OnTest2)
-	ON_UPDATE_COMMAND_UI(ID_TEST2, OnUpdateTest2)
-	//}}AFX_MSG_MAP
+	////}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-#define CheckItem(id, uFlags) CMenu::FromHandle(GetMenu(hWnd))->CheckMenuItem(id, uFlags);
-#define EnableItem(id, uFlags) CMenu::FromHandle(GetMenu(hWnd))->EnableMenuItem(id, uFlags);
-//#define IDB_COMPILEPAL 1007
+#define CheckItem(id, uFlags) CMenu::FromHandle(GetMenu(hammerHWnd))->CheckMenuItem(id, uFlags);
+#define EnableItem(id, uFlags) CMenu::FromHandle(GetMenu(hammerHWnd))->EnableMenuItem(id, uFlags);
 
 //TODO Move to header?
-HWND hWnd;
-CToolBar hammerToolbar;
+HWND hammerHWnd;
 HMENU hMenuHammer;
 SyncMenu smDebug;
-
-//TODO make a cleaner solution than sending messages?
-HWND test;
-
 
 long OldWndProc;
 
@@ -76,30 +76,38 @@ long OldWndProc;
 
 // CHammerSyncInjectedApp
 
-
-void CHammerSyncInjectedApp::OnCompilePalBtnPressed()
-{
-	Utils::PrintError(L"OnCompPalBtnPressed");
-}
-
-void CHammerSyncInjectedApp::OnUpdateCompilePalBtnPressed(CCmdUI *pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetText(L"test");
-	Utils::PrintError(L"OnCompPalUpdate");
-}
-
-
-
-void CHammerSyncInjectedApp::OnUpdateTest1(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-}
-
-void CHammerSyncInjectedApp::OnUpdateTest2(CCmdUI * pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-}
+//Not needed, doesnt actually do anything  
+//void CHammerSyncInjectedApp::OnCompilePalBtnPressed()
+//{
+//	Utils::PrintError(L"OnCompPalBtnPressed");
+//}
+//
+//void CHammerSyncInjectedApp::OnUpdateCompilePalBtnPressed(CCmdUI *pCmdUI)
+//{
+//	pCmdUI->Enable(TRUE);
+//	pCmdUI->SetText(L"test");
+//	Utils::PrintError(L"OnCompPalUpdate");
+//}
+//
+//
+//
+//void CHammerSyncInjectedApp::OnUpdateTest1(CCmdUI* pCmdUI)
+//{
+//	pCmdUI->Enable(TRUE);
+//}
+//
+//void CHammerSyncInjectedApp::OnUpdateTest2(CCmdUI * pCmdUI)
+//{
+//	pCmdUI->Enable(TRUE);
+//}
+//
+//void CHammerSyncInjectedApp::OnOverrideBtn()
+//{
+//}
+//
+//void CHammerSyncInjectedApp::OnOverrideBtnUpdate(CCmdUI * pCmdUI)
+//{
+//}
 
 // CHammerSyncInjectedApp construction
 CHammerSyncInjectedApp::CHammerSyncInjectedApp()
@@ -117,7 +125,44 @@ CHammerSyncInjectedApp::~CHammerSyncInjectedApp()
 CHammerSyncInjectedApp theApp;
 //HIPWindow *hipSettings;
 
+//TODO dont let more than 1 instance open
+BOOL LaunchCompilePal()
+{
+	LPCTSTR lpAppName = L"CompilePalX.exe";
+	LPWSTR lpAppPath = L"C:/Users/Zach/Desktop/Compile Pal 024/CompilePalX.exe";
 
+	//TODO make path current map path
+	LPWSTR args = L"game:teamfortress2 wipe! path:";
+
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	ZeroMemory(&pi, sizeof(pi));
+
+	si.cb = sizeof(si);
+
+	if (CreateProcess(
+		lpAppPath,		//Path
+		args,			//Command line args
+		NULL,			//Process handle not inheritable
+		NULL,			//Thread handle not inheritable
+		FALSE,			//Set handle inheritance to FALSE
+		0,				//No creation flags
+		NULL,			//Use parents enviroment block
+		NULL,		//Path of app directory
+		&si,			//Startup info
+		&pi				//Process info
+	) == 0)
+	{
+		return FALSE;
+	}
+
+	//TODO probably store these so we can close compile pal in deconstructor
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+	return TRUE;
+}
 
 LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -127,7 +172,7 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			switch(wParam)
 			{
 				case(ID_DEBUG_CALLFUNCTION):
-					Utils::PrintError(L"Source: WndProc");
+					//Utils::PrintError(L"Source: WndProc");
 					break;
 
 				case(ID_HAMMERSYNC_DEBUGENABLE):
@@ -139,18 +184,17 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 						CheckItem(ID_HAMMERSYNC_DEBUGENABLE, MF_CHECKED);
 
 						smDebug.Create(hMenuHammer);
-						DrawMenuBar(hWnd);
+						DrawMenuBar(hammerHWnd);
 					} else
 					{
 						CheckItem(ID_HAMMERSYNC_DEBUGENABLE, MF_UNCHECKED);
-						smDebug.Destroy(hWnd);
-						DrawMenuBar(hWnd);
+						smDebug.Destroy(hammerHWnd);
+						DrawMenuBar(hammerHWnd);
 					}
 					break;
 
 				case(ID_HAMMERSYNC_SETTINGS):
 					{
-					SendMessage(test, TB_ENABLEBUTTON, 31, (LPARAM)MAKELONG(TRUE, 0));
 /*					HINSTANCE hInstance = (HINSTANCE)::GetModuleHandle(NULL);
 					HWND hwndButton = CreateWindow(
 						L"MDIClient",
@@ -160,7 +204,7 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 						10,
 						75,
 						24,
-						hWnd,
+						hammerHWnd,
 						NULL, hInstance, NULL);				*/		
 					}
 					break;
@@ -168,29 +212,29 @@ LRESULT CALLBACK SyncWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				case(ID_HAMMERSYNC_EXIT):
 					break;
 
-				case(ID_HAMMERSYNC_COMPILEPALBTN):
-					Utils::PrintError(L"CompilePalBtn WinMessage");
+				//This message acts like a overload. The default message has no lparam
+				case(ID_COMPILEPAL_BUTTON_OVERRIDE):
+				{
+					//If the message comes from our button, block message going to subclassed window
+					if (lParam != 0)
+					{
+						//If compile pal fails to launch, prompt user for path
+						if (!LaunchCompilePal())
+						{
+							Utils::PrintError(L"App didnt open");
+						}
+						return 0;						
+					}
 					break;
-
-				case(ID_TEST1):
-					Utils::PrintError(L"CompilePalBtn WinMessage");
-					break;
-				case(ID_TEST2):
-					Utils::PrintError(L"CompilePalBtn WinMessage");
-					break;
+				}
 			}
 			break;
-		case(WM_INITMENU):
-			//CMenu::FromHandle(GetMenu(hWnd))->EnableMenuItem(ID_DEBUG_CALLFUNCTION, MF_ENABLED | MF_BYCOMMAND);
-			break;
-			//return 0;
 			
 		//Makes our menu items work, but breaks recent items menu. Hammer disables our menus by default, but blocking that command seems to be a workaround
 		case(WM_INITMENUPOPUP):
-			//EnableItem(ID_DEBUG_CALLFUNCTION, MF_ENABLED);
-			//break;
 			//TODO figure out a less hacky workaround. Creating inside subclassed message handler could work?
-			//Maybe editing messages could work? or sending messages
+			//Maybe editing messages could work? or sending messages. 
+			//TODO similar implementation to toolbarbuttons, overload existing buttons ids?
 			return 0;	
 
 		//case(WM_INITDIALOG):
@@ -212,7 +256,7 @@ BOOL CALLBACK GetChildWndCallback(HWND hWndChild, LPARAM lParam)
 		GetClassName(hWndChild, className, MAX_CLASS_NAME);
 
 
-		//convert to wstring becuase LPWSTR doesnt seem to want to compare correctly (probably because of extra space in the buffer)
+		//convert to wstring becuase LPWSTR doesnt seem to want to compare correctly (probably because of extra space in the buffer?)
 		std::wstring wClassName = std::wstring(className);
 
 		//Kindof works, the target toolbar is the first one that appears, but this is a hacky implementation TODO do something cleaner
@@ -222,19 +266,14 @@ BOOL CALLBACK GetChildWndCallback(HWND hWndChild, LPARAM lParam)
 			{
 				//Add seperator
 				HIPToolBarButtonSeperator::Append(hWndChild);
-
-				//Add buttons
-				HIPToolBarButton compilePalBtn(IDB_PLACEHOLDER, ID_HAMMERSYNC_COMPILEPALBTN, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 31 );
+				
+				//Add compilepal button
+				HIPToolBarButton compilePalBtn(IDB_COMPILEPAL, ID_COMPILEPAL_BUTTON_OVERRIDE, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 31 );
 				compilePalBtn.AppendWithBitmap(hWndChild);	
 
-				HIPToolBarButton tempBtn(IDB_TEST, ID_TEST1, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 32 );
-				tempBtn.AppendWithBitmap(hWndChild);	
-
-				HIPToolBarButton tempBtn2(IDB_OBSOLETE, ID_TEST2, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 33 );
-				tempBtn2.AppendWithBitmap(hWndChild);	
-
-				SendMessage(hWndChild, TB_ENABLEBUTTON, compilePalBtn.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
-				test = hWndChild;
+				//SendMessage(hWndChild, TB_ENABLEBUTTON, compilePalBtn.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
+				//SendMessage(hWndChild, TB_ENABLEBUTTON, tempBtn.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
+				//SendMessage(hWndChild, TB_ENABLEBUTTON, tempBtn2.bitmapLoc,(LPARAM)MAKELONG(TRUE, 0));
 				keepMakingToolbars = false;
 			}
 		}
@@ -266,13 +305,12 @@ BOOL CHammerSyncInjectedApp::InitInstance()
 {
 	CWinApp::InitInstance();
 	//this->m_pszAppName = L"HIP";
-	
 
 	//Get handle to hammer window
-	hWnd = FindWindow(L"VALVEWORLDCRAFT", NULL);
+	hammerHWnd = FindWindow(L"VALVEWORLDCRAFT", NULL);
 
 	//DWORD ThreadId;
-	//GetWindowThreadProcessId(hWnd, &ThreadId);
+	//GetWindowThreadProcessId(hammerHWnd, &ThreadId);
 	//threadHandle = OpenThread(THREAD_SET_INFORMATION, TRUE, ThreadId);
 	//if (threadHandle == NULL)
 	//{
@@ -287,29 +325,19 @@ BOOL CHammerSyncInjectedApp::InitInstance()
 	//	OutputDebugString((LPWSTR)message.c_str());
 	//}
 
-	CWnd *hammer = CWnd::FromHandle(hWnd);
-	CMDIFrameWnd *hammerMainFrm = (CMDIFrameWnd*)CWnd::FromHandle(hWnd);
-	CFrameWnd *hammerFrm = (CFrameWnd*)CWnd::FromHandle(hWnd);
+	CWnd *hammer = CWnd::FromHandle(hammerHWnd);
+	CMDIFrameWnd *hammerMainFrm = (CMDIFrameWnd*)CWnd::FromHandle(hammerHWnd);
+	CFrameWnd *hammerFrm = (CFrameWnd*)CWnd::FromHandle(hammerHWnd);
 
 	//Enum child windows to get the top toolbar ID
-	EnumChildWindows(hWnd, GetChildWndCallback, NULL);
-
-
-	//CFrameWnd *hammerFrm = (CFrameWnd*)CWnd::FromHandle(hWnd);
-	
-	//HIPWindow *hipSettings = new HIPWindow();
-	////hipSettings->AssertValid();
-	//theApp.m_pMainWnd = hipSettings;
-	//hipSettings->ShowWindow(SW_SHOW);
-	//hipSettings->UpdateWindow();
-	////system("pause");			
+	EnumChildWindows(hammerHWnd, GetChildWndCallback, NULL);
 
 
 	//Subclass hammer window and reroute messages to SyncWndProc TODO rename to HIP
-	OldWndProc = SetWindowLong(hWnd, GWL_WNDPROC, (long)SyncWndProc);
+	OldWndProc = SetWindowLong(hammerHWnd, GWL_WNDPROC, (long)SyncWndProc);
 	
 	//Get Hammer's menu
-	hMenuHammer = GetMenu(hWnd);
+	hMenuHammer = GetMenu(hammerHWnd);
 	
 	CreateMenus();
 	return TRUE;	
@@ -334,7 +362,7 @@ void CHammerSyncInjectedApp::CreateMenus()
 		CheckItem(ID_HAMMERSYNC_DEBUGENABLE, MF_CHECKED);
 	}
 
-	DrawMenuBar(hWnd);
+	DrawMenuBar(hammerHWnd);
 }
 
 void CHammerSyncInjectedApp::CreateToolbars(HWND hWndparent)
@@ -351,14 +379,14 @@ void CHammerSyncInjectedApp::CreateToolbars(HWND hWndparent)
 	//SendMessage(hWndparent, TB_AUTOSIZE, 0, 0);
 	
 	//Redraws the window so the new toolbar items are added
-	//CFrameWnd *hammer = (CFrameWnd*)CWnd::FromHandle(hWnd);
+	//CFrameWnd *hammer = (CFrameWnd*)CWnd::FromHandle(hammerHWnd);
 	//hammer->DockControlBar(nullptr, nullptr, NULL);
 	//hammer->RedrawWindow();
 	//hammer->InvalidateRect(NULL);
 	//hammer->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 	//hammer->RedrawWindow(NULL, NULL, RDW_NOFRAME | RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 	//hammer->UpdateWindow();
-	//RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
+	//RedrawWindow(hammerHWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 }
 
 

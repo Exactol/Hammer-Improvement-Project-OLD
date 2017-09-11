@@ -12,6 +12,7 @@
 #define IDB_BITMAP2                     1011
 #define IDB_OBSOLETE                    1011
 
+#define ID_COMPILEPAL_BUTTON_OVERRIDE	32778 //Overrides ID_VIEW_3DWIREFRAME   
 //Hammer's ids end at around 40000
 #define ID_HAMMERSYNC_SETTINGS          52771
 #define ID_DEBUG_CALLFUNCTION           52772
@@ -22,6 +23,8 @@
 #define ID_HAMMERSYNC_COMPILEPALBTN     52777
 #define ID_TEST1						52778
 #define ID_TEST2						52779
+
+//TODO investigate message -32541 vscale toggle
 
 // Next default values for new objects
 // 

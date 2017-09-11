@@ -110,6 +110,8 @@ public:
 	~HIPToolBarButton()
 	{
 	}
+
+	//TODO investigate TB_SETTOOLTIPS
 };
 
 const class HIPToolBarButtonSeperator

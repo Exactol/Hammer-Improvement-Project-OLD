@@ -28,14 +28,17 @@ public:
 
 protected:
 	//{{AFX_MSG(CHammerSyncInjectedApp)
-	afx_msg void OnCompilePalBtnPressed();
-	afx_msg void OnUpdateCompilePalBtnPressed(CCmdUI* pCmdUI);
+	//afx_msg void OnCompilePalBtnPressed();
+	//afx_msg void OnUpdateCompilePalBtnPressed(CCmdUI* pCmdUI);
 
-	afx_msg void OnTest1(){};
-	afx_msg void OnUpdateTest1(CCmdUI* pCmdUI);
+	//afx_msg void OnTest1(){};
+	//afx_msg void OnUpdateTest1(CCmdUI* pCmdUI);
 
-	afx_msg void OnTest2(){};
-	afx_msg void OnUpdateTest2(CCmdUI* pCmdUI);
+	//afx_msg void OnTest2(){};
+	//afx_msg void OnUpdateTest2(CCmdUI* pCmdUI);
+
+	//afx_msg void OnOverrideBtn();
+	//afx_msg void OnOverrideBtnUpdate(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
