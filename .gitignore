@@ -56,3 +56,6 @@ forge/obj/
 
 #oldhammersyncfolder
 hammersyncInjectedOLD/
+
+#ignore forge for now since its not used yet
+forge/
